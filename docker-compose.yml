@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  db-dev:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - TZ=Asia/Tokyo
+    container_name: db-dev
+    restart: always
+    volumes:
+      - data-dev:/var/lib/mysql
+      
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT
+      - DRIVER
+      - DSN
+    container_name: api
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/go/src/app
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db-dev
+
+volumes:
+  data-dev:
+    driver: local
