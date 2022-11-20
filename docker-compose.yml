@@ -13,6 +13,8 @@ services:
     restart: always
     volumes:
       - data-dev:/var/lib/mysql
+    ports:
+      - '4306:3306'
       
   api:
     build:
