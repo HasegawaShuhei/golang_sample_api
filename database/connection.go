@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/HasegawaShuhei/golang_sample_api/entity"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,7 +21,7 @@ func OpenDB() *gorm.DB {
 	if err != nil {
 		log.Fatal("OpenDB failed:", err)
 	}
-
+	db.AutoMigrate(&entity.Book{}, &entity.User{})
 	fmt.Println("db connected!!")
 	return db
 }

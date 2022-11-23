@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/HasegawaShuhei/golang_sample_api/controller"
 	"github.com/HasegawaShuhei/golang_sample_api/database"
+	"github.com/HasegawaShuhei/golang_sample_api/repository"
+	"github.com/HasegawaShuhei/golang_sample_api/service"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
@@ -10,7 +12,10 @@ import (
 
 var (
 	db             *gorm.DB                  = database.OpenDB()
-	authController controller.AuthController = controller.NewAuthController()
+	userRepository repository.UserRepository = repository.NewUserRepository(db)
+	authService    service.AuthService       = service.NewAuthService(userRepository)
+	jwtService     service.JWTService        = service.NewJWTService()
+	authController controller.AuthController = controller.NewAuthController(authService, jwtService)
 )
 
 func main() {
